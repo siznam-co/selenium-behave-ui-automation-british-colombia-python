@@ -29,17 +29,55 @@ class CallCenterConsole(BASEPAGE):
         "reg_number": (By.XPATH, './/div[@class = "confirmation-number"]'),
 
         "global_search_field": (By.XPATH, './/input[@placeholder = "Search..."]'),
-        "search_icon": (By.XPATH, './/li[@role = "presentation"]'),
+        "search_icon": (By.XPATH, '(.//li[@role = "presentation"])'),
         "searched_citizen": (By.XPATH, './/tbody/tr/th/span/a'),
         "check_eligibility_btn": (By.XPATH, './/button[@title = "Check Eligibility"]'),
         "check_phn_btn": (By.XPATH, './/button[@title = "Verify Personal Health Number"]'),
         "success_toast": (By.XPATH, './/div[text() = "Success"]'),
-
+        "covid_vaccination_option": (By.XPATH, './/select[@name = "typeId"]/option[text() = "COVID_19_Vaccination"]'),
+        "is_eligible": (By.XPATH, './/span[text() = "Eligibility check completed. Participant is eligible for COVID_19_Vaccination."]')
     }
 
     constants = {
         "link": '/lightning/page/home/'
     }
+
+    def check_reg_no(self, reg_no):
+        self.send_text_to_element(self.find_element(self.locator_dictionary["global_search_field"]), reg_no)
+        WebDriverWait(self.browser, self.WAIT).until(
+            EC.presence_of_element_located(self.locator_dictionary["search_icon"])).click()
+        try:
+            WebDriverWait(self.browser, 20).until(
+                EC.presence_of_element_located(self.locator_dictionary["searched_citizen"]))
+        except:
+            print("The search field is not working screen.")
+        # self.click_element(self.find_element(self.locator_dictionary["atc_btn"]))
+        var = self.find_element(self.locator_dictionary["searched_citizen"])
+        assert var is not None, "The searched record(s) are not displayed."
+
+    def open_patient_record(self):
+        self.click_element(self.find_element(self.locator_dictionary["searched_citizen"]))
+        try:
+            WebDriverWait(self.browser, 20).until(
+                EC.presence_of_element_located(self.locator_dictionary["check_eligibility_btn"]))
+        except:
+            print("Exception: The records in not clickable at the moment")
+        # self.click_element(self.find_element(self.locator_dictionary["atc_btn"]))
+        var = self.find_element(self.locator_dictionary["check_eligibility_btn"])
+        assert var is not None, "The opened record is not displayed."
+
+    def check_eligibility(self):
+        self.click_element(self.find_element(self.locator_dictionary["check_eligibility_btn"]))
+        WebDriverWait(self.browser, 20).until(
+            EC.element_to_be_clickable(self.locator_dictionary["covid_vaccination_option"])).click()
+        try:
+            WebDriverWait(self.browser, 20).until(
+                EC.presence_of_element_located(self.locator_dictionary["is_eligible"]))
+        except:
+            print("Exception: The records in not clickable at the moment")
+        # self.click_element(self.find_element(self.locator_dictionary["atc_btn"]))
+        var = self.find_element(self.locator_dictionary["is_eligible"])
+        assert var is not None, "The opened record is not displayed."
 
     def go_to(self):
         base_url = get_setting("URL", "portal_url")
@@ -113,4 +151,3 @@ class CallCenterConsole(BASEPAGE):
         r = r.replace(" ", "")
         print(r)
         return r
-

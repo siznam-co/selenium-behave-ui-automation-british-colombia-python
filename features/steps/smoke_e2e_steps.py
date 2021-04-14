@@ -3,6 +3,7 @@ import time
 from behave import *
 import pandas as pd
 
+from pageobjects.CallCenterConsole import CallCenterConsole
 from pageobjects.Login import Login
 from pageobjects.RegisterUser import RegisterUser, get_setting, set_setting
 
@@ -51,3 +52,19 @@ def step_impl(context):
       'navigated to the "{home_screen}" screen.')
 def step_impl(context, user_name, password, login_btn, home_screen):
     Login(context).login_into_website(get_setting("CRED", "username"), get_setting("CRED", "password"), home_screen)
+
+
+@then("the user search with citizen with his/her registration number and check if the record is there or not.")
+def step_impl(context):
+    CallCenterConsole(context).check_reg_no(get_setting("REG_NO", "reg_no"))
+
+
+@step("the clicks and opens the user record.")
+def step_impl(context):
+    CallCenterConsole(context).open_patient_record()
+
+
+@then('the user clicks on the "{check_eligibility_btn}" button, selects the "{vaccination_option}" option and check '
+      'if the patient is eligible.')
+def step_impl(context, check_eligibility_btn, vaccination_option):
+    CallCenterConsole(context).check_eligibility()
