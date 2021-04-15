@@ -10,7 +10,7 @@ Feature: Vaccine Registration
     And the user copies "registration confirmation number" and save it.
 
   @search_reg_in_call_center
-  Scenario: Register a citizen through Call Center Console.
+  Scenario: Search a citizen through Call Center Console verify his/her eligibility.
     Given user is on Login Page.
     When the user provide the "User Name" and "Password", and clicks the "Login" button, the user is navigated to the "Home" screen.
     Then the user search with citizen with his/her registration number and check if the record is there or not.

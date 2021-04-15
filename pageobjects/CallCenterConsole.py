@@ -44,13 +44,15 @@ class CallCenterConsole(BASEPAGE):
 
     def check_reg_no(self, reg_no):
         self.send_text_to_element(self.find_element(self.locator_dictionary["global_search_field"]), reg_no)
+        time.sleep(2)
         WebDriverWait(self.browser, self.WAIT).until(
             EC.presence_of_element_located(self.locator_dictionary["search_icon"])).click()
+        time.sleep(2)
         try:
             WebDriverWait(self.browser, 20).until(
                 EC.presence_of_element_located(self.locator_dictionary["searched_citizen"]))
         except:
-            print("The search field is not working screen.")
+            print("The search field is not working.")
         # self.click_element(self.find_element(self.locator_dictionary["atc_btn"]))
         var = self.find_element(self.locator_dictionary["searched_citizen"])
         assert var is not None, "The searched record(s) are not displayed."
@@ -67,9 +69,10 @@ class CallCenterConsole(BASEPAGE):
         assert var is not None, "The opened record is not displayed."
 
     def check_eligibility(self):
-        self.click_element(self.find_element(self.locator_dictionary["check_eligibility_btn"]))
-        WebDriverWait(self.browser, 20).until(
-            EC.element_to_be_clickable(self.locator_dictionary["covid_vaccination_option"])).click()
+        # self.click_element(self.find_element(self.locator_dictionary["check_eligibility_btn"]))
+        self.browser.execute_script("arguments[0].click();",
+                                    self.find_element(self.locator_dictionary["check_eligibility_btn"]))
+        self.click_element(self.find_element(self.locator_dictionary["covid_vaccination_option"]))
         try:
             WebDriverWait(self.browser, 20).until(
                 EC.presence_of_element_located(self.locator_dictionary["is_eligible"]))
@@ -78,6 +81,7 @@ class CallCenterConsole(BASEPAGE):
         # self.click_element(self.find_element(self.locator_dictionary["atc_btn"]))
         var = self.find_element(self.locator_dictionary["is_eligible"])
         assert var is not None, "The opened record is not displayed."
+        time.sleep(5)
 
     def go_to(self):
         base_url = get_setting("URL", "portal_url")
