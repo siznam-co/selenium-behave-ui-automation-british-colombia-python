@@ -23,7 +23,7 @@ def step_impl(context, continue_btn):
     # df = pd.read_csv('data.csv')
     df = pd.read_csv('data.csv', header=None, nrows=5)
     print(df[0][1])
-    RegisterUser(context).fill_form_step_one("BEATRICE", "BCYPCST", "Jan 25, 1932", "9879454689", "V0R2Y0")
+    RegisterUser(context).fill_form_step_one("BEATRICE", "BCYPCST", "Jan 25, 1932", "V0R2Y0", "9879454689")
 
 
 @step('the user enters the "{email}" or "{sms_phone_number}" to send confirmation and click "{continue_btn}" button.')
@@ -68,3 +68,25 @@ def step_impl(context):
       'if the patient is eligible.')
 def step_impl(context, check_eligibility_btn, vaccination_option):
     CallCenterConsole(context).check_eligibility()
+
+
+@when('the user clicks "{reg_btn}" button, the user is navigated to 3 step form screen.')
+def step_impl(context, reg_btn):
+    CallCenterConsole(context).click_register_btn(reg_btn)
+
+
+@then('the user fills the personal details, verify "{phn_number}" number and clicks "{next_btn}" button.')
+def step_impl(context, phn_number, next_btn):
+    CallCenterConsole(context).fill_form_step_one("BEATRICE", "BCYPCST", "Jan 25, 1932", "V0R2Y0", "9879454689")
+
+
+@step('the user enters the "{email}" or "{sms_phone_number}" to send confirmation email and click "{review_btn}" '
+      'button.')
+def step_impl(context, email, sms_phone_number, review_btn):
+    CallCenterConsole(context).fill_form_step_two(get_setting("EMAIL", "email"))
+
+
+@then('the user verify all the details provided, and clicks "{register_btn}" button to submit the registration '
+      'successfully.')
+def step_impl(context, register_btn):
+    CallCenterConsole(context).submit_form(register_btn)

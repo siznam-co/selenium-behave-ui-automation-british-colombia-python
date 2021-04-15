@@ -12,30 +12,36 @@ import time
 class CallCenterConsole(BASEPAGE):
 
     locator_dictionary = {
-        "title_of_page": (By.XPATH, './/div[text() = "Vaccine Registration"]'),
-        "register_btn": (By.XPATH, './/button/span[text() = "Register now"]'),
-        "first_name": (By.XPATH, '//*[@id="input-13"]'),
-        "last_name": (By.XPATH, '//*[@id="input-14"]'),
-        "dob": (By.XPATH, '//*[@id="input-16"]'),
-        "postal_code": (By.XPATH, '//*[@id="input-20"]'),
-        "phn_number": (By.XPATH, '//*[@id="input-19"]'),
-        "continue_btn": (By.XPATH, './/button[text() = "Continue"]'),
-        "email_checkbox": (By.XPATH, '//*[@id="email-24"]'),
-        "email_address": (By.XPATH, '//*[@id="input-25"]'),
+        "register_btn": (By.XPATH, './/button[@title = " Create New Profile"]'),
+        "title_of_page": (By.XPATH, './/div[text() = "Citizen\'s Primary Information"]'),
+
+        "first_name": (By.XPATH, '//*[@name="FirstName"]'),
+        "last_name": (By.XPATH, '//*[@name="LastName"]'),
+        "dob": (By.XPATH, '//*[@name="PersonBirthdate"]'),
+        "postal_code": (By.XPATH, '//*[@name="DDH_HC_Zip_Code"]'),
+        "phn_number": (By.XPATH, '//*[@name="HC_Personal_Health_Number"]'),
+        "check_phn_btn": (By.XPATH, './/button[@title = "Verify Personal Health Number"]'),
+        "phn_un_success_toast": (By.XPATH, './/h2[text() = "Data Match Unsuccessful"]'),
+        "phn_cancel_btn": (By.XPATH, './/button[@title = "Cancel"]'),
+        "next_btn": (By.XPATH, './/button[@title = "Next"]'),
+        "email_checkbox": (By.XPATH, '//*[@name="DDH_HC_Preferred"]'),
+        "email_address": (By.XPATH, '//*[@name="PersonEmail"]'),
         "confirm_email_address": (By.XPATH, '//*[@name = "ConfirmEmail"]'),
-        "continue_btn_2": (By.XPATH, '(.//*/button[text() = "Continue"])[2]'),
-        "patient_consent_checkbox": (By.XPATH, '//*[@id="DDH_HC_Patient_Consent-27"]'),
-        "submit_btn": (By.XPATH, './/button[text() = "Submit"]'),
+        "review_btn": (By.XPATH, './/button[@title = "Review"]'),
+
+        "register_btn_last": (By.XPATH, './/button[text() = "Register"]'),
+
         "reg_number": (By.XPATH, './/div[@class = "confirmation-number"]'),
 
         "global_search_field": (By.XPATH, './/input[@placeholder = "Search..."]'),
         "search_icon": (By.XPATH, '(.//li[@role = "presentation"])'),
         "searched_citizen": (By.XPATH, './/tbody/tr/th/span/a'),
         "check_eligibility_btn": (By.XPATH, './/button[@title = "Check Eligibility"]'),
-        "check_phn_btn": (By.XPATH, './/button[@title = "Verify Personal Health Number"]'),
         "success_toast": (By.XPATH, './/div[text() = "Success"]'),
         "covid_vaccination_option": (By.XPATH, './/select[@name = "typeId"]/option[text() = "COVID_19_Vaccination"]'),
-        "is_eligible": (By.XPATH, './/span[text() = "Eligibility check completed. Participant is eligible for COVID_19_Vaccination."]')
+        "is_eligible": (By.XPATH, './/span[text() = "Eligibility check completed. Participant is eligible for '
+                                  'COVID_19_Vaccination."]')
+
     }
 
     constants = {
@@ -83,25 +89,12 @@ class CallCenterConsole(BASEPAGE):
         assert var is not None, "The opened record is not displayed."
         time.sleep(5)
 
-    def go_to(self):
-        base_url = get_setting("URL", "portal_url")
-        self.browser.get(base_url + self.constants["link"])
-        # self.browser.get(base_url)
-        try:
-            WebDriverWait(self.browser, self.WAIT).until(
-                EC.presence_of_element_located(self.locator_dictionary["title_of_page"]))
-        except:
-            print("The user is not navigated to Portal Home  screen.")
-        # self.click_element(self.find_element(self.locator_dictionary["atc_btn"]))
-        var = self.find_element(self.locator_dictionary["title_of_page"])
-        assert var is not None, "The user is not navigated to Portal Home  screen."
-
     def click_register_btn(self, register_btn):
         e = ""
         self.click_element(self.find_element(self.locator_dictionary["register_btn"]))
         try:
             e = WebDriverWait(self.browser, self.WAIT).until(
-                    EC.presence_of_element_located(self.locator_dictionary["continue_btn"]))
+                    EC.presence_of_element_located(self.locator_dictionary["title_of_page"]))
         except:
             print("The form is not appeared.")
         assert e is not None, "The form is not appeared."
@@ -114,11 +107,23 @@ class CallCenterConsole(BASEPAGE):
         self.send_text_to_element(self.find_element(self.locator_dictionary["postal_code"]), postal_code)
         self.send_text_to_element(self.find_element(self.locator_dictionary["phn_number"]), phn_number)
 
-        self.click_element(self.find_element(self.locator_dictionary["continue_btn"]))
+        self.click_element(self.find_element(self.locator_dictionary["first_name"]))
+
+        self.click_element(self.find_element(self.locator_dictionary["check_phn_btn"]))
+
+        if self.is_element_displayed(self.locator_dictionary["success_toast"]):
+            time.sleep(2)
+        else:
+            e = self.find_element(self.locator_dictionary["phn_un_success_toast"])
+            if e is not None:
+                self.click_element(self.find_element(self.locator_dictionary["phn_cancel_btn"]))
+            else:
+                print("The phn number is not verified.")
+        self.click_element(self.find_element(self.locator_dictionary["next_btn"]))
         time.sleep(1)
         try:
             e = WebDriverWait(self.browser, self.WAIT).until(
-                    EC.presence_of_element_located(self.locator_dictionary["continue_btn_2"]))
+                    EC.presence_of_element_located(self.locator_dictionary["review_btn"]))
         except:
             print("The form is not appeared.")
         assert e is not None, "The form step 2 is not appeared."
@@ -129,29 +134,21 @@ class CallCenterConsole(BASEPAGE):
         self.send_text_to_element(self.find_element(self.locator_dictionary["email_address"]), email)
         self.send_text_to_element(self.find_element(self.locator_dictionary["confirm_email_address"]), email)
 
-        self.click_element(self.find_element(self.locator_dictionary["continue_btn_2"]))
+        self.click_element(self.find_element(self.locator_dictionary["review_btn"]))
         try:
             e = WebDriverWait(self.browser, self.WAIT).until(
-                    EC.presence_of_element_located(self.locator_dictionary["submit_btn"]))
+                    EC.presence_of_element_located(self.locator_dictionary["register_btn_last"]))
         except:
             print("The form is not appeared.")
         assert e is not None, "The form step 3 is not appeared."
 
-    def submit_form(self, consent_btn, submit_btn):
+    def submit_form(self, submit_btn):
         e = ""
-        time.sleep(2)
-        self.click_element(self.find_element(self.locator_dictionary["patient_consent_checkbox"]))
         time.sleep(1)
-        self.click_element(self.find_element(self.locator_dictionary["submit_btn"]))
+        self.click_element(self.find_element(self.locator_dictionary["register_btn_last"]))
         try:
             e = WebDriverWait(self.browser, self.WAIT).until(
-                    EC.presence_of_element_located(self.locator_dictionary["reg_number"]))
+                    EC.presence_of_element_located(self.locator_dictionary["check_eligibility_btn"]))
         except:
             print("The form was not submitted. Try Again!")
         assert e is not None, "The form was not submitted. Try Again!"
-
-    def save_reg_number(self, reg_number):
-        r = self.get_element_text(self.find_element(self.locator_dictionary["reg_number"]))
-        r = r.replace(" ", "")
-        print(r)
-        return r
