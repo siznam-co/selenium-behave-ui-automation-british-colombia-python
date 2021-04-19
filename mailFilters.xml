@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns='http://www.w3.org/2005/Atom' xmlns:apps='http://schemas.google.com/apps/2006'>
+	<title>Mail Filters</title>
+	<id>tag:mail.google.com,2008:filters:z0000001618521983174*8796714660633738434</id>
+	<updated>2021-04-18T12:40:00Z</updated>
+	<author>
+		<name>Sqa Engineer</name>
+		<email>theqa13119@gmail.com</email>
+	</author>
+	<entry>
+		<category term='filter'></category>
+		<title>Mail Filter</title>
+		<id>tag:mail.google.com,2008:filter:z0000001618521983174*8796714660633738434</id>
+		<updated>2021-04-18T12:40:00Z</updated>
+		<content></content>
+		<apps:property name='from' value='BCVaccDoNotReply@hlth.gov.bc.ca'/>
+		<apps:property name='to' value='theqa13119@gmail.com'/>
+		<apps:property name='hasTheWord' value='vaccination, Vaccination'/>
+		<apps:property name='label' value='Vaccination Confirmation'/>
+		<apps:property name='shouldArchive' value='true'/>
+		<apps:property name='shouldNeverSpam' value='true'/>
+		<apps:property name='sizeOperator' value='s_sl'/>
+		<apps:property name='sizeUnit' value='s_smb'/>
+	</entry>
+</feed>

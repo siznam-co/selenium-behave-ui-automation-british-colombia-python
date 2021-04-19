@@ -3,6 +3,7 @@ import time
 from behave import *
 import pandas as pd
 
+from pageobjects.BookAppointment import BookAppointment
 from pageobjects.CallCenterConsole import CallCenterConsole
 from pageobjects.Login import Login
 from pageobjects.RegisterUser import RegisterUser, get_setting, set_setting
@@ -90,3 +91,57 @@ def step_impl(context, email, sms_phone_number, review_btn):
       'successfully.')
 def step_impl(context, register_btn):
     CallCenterConsole(context).submit_form(register_btn)
+
+
+@step("if the user is eligible, go the {appointment} tab of the citizen list screen.")
+def step_impl(context, appointment):
+    CallCenterConsole(context).go_to_appointment_tab()
+
+
+@when("the user selects {vaccine}, {city} and {hospital}, and click {select} button on available slots.")
+def step_impl(context, vaccine, city, hospital, select):
+    CallCenterConsole(context).search_and_select_appointment()
+
+
+@then("the user {saves} the appointment after reviewing.")
+def step_impl(context, saves):
+    CallCenterConsole(context).save_appointment()
+
+
+@step("clicks the provides {sgi_number} number to go to the {appointment_list} screen to verify the {"
+      "appointment_confirmation_number}.")
+def step_impl(context, sgi_number, appointment_list, appointment_confirmation_number):
+    CallCenterConsole(context).get_appointment_number()
+
+
+@given("user is on email {login_page} Page.")
+def step_impl(context, login_page):
+    BookAppointment(context).go_to()
+
+
+@when('the user provide the "{user_name}" and "{password}", and clicks the "{login_btn}" button, the user is '
+      'navigated to the mail "{inbox}" screen.')
+def step_impl(context, user_name, password, login_btn, inbox):
+    BookAppointment(context).login_gmail(get_setting("EMAIL", "email"), get_setting("EMAIL", "pw"), inbox)
+
+
+@then("the user opens the received email and click the link {click_here_link} which will take the user to the {"
+      "appointment} screen.")
+def step_impl(context, click_here_link, appointment):
+    BookAppointment(context).open_email_click_link("label:vaccination-confirmation", appointment)
+
+
+@when("the user clicks {book_appointment} button after entering {registration_confirmation_number} and {phn_number}, "
+      "the user is moved to appointment detail screen.")
+def step_impl(context, book_appointment, registration_confirmation_number, phn_number):
+    BookAppointment(context).enter_booking_no(get_setting("REG_NO", "reg_no"), '9879454689')
+
+
+@step("the user selects the {appointment_details} and clicks {next_btn} button.")
+def step_impl(context, appointment_details, next_btn):
+    BookAppointment(context).enter_booking_details()
+
+
+@then("the user enters email and confirm booking.")
+def step_impl(context):
+    BookAppointment(context).confirm_booking(get_setting("EMAIL", "email"))

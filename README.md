@@ -30,6 +30,14 @@ Example:``` behave --tags='tagname' ```
 ### How to run on saucelab?
 ``` behave -D saucelabs=true --tags='tagname' ```
 
+### How to install allure-report?
+Following commands needed to be run on powershell.
+```
+Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.scoop.sh')
+scoop install allure
+```
+
+
 ### How to run allure-report?
 Following commands needed to be run:
 

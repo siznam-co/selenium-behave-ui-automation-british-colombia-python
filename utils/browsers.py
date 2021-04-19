@@ -19,6 +19,8 @@ def browsers(context, name):
     if name == 'chrome':
         chrome_options = Options()
         chrome_options.add_argument("--incognito")
+        chrome_options.add_argument("disable-infobars")
+        chrome_options.add_argument("--disable-extensions")
         if headless == "true":
             chrome_options.add_argument("--headless")
         context.browser = webdriver.Chrome(executable_path=ChromeDriverManager().install(), chrome_options=chrome_options)
