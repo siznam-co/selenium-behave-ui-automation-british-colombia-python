@@ -31,4 +31,11 @@ Feature: Vaccine Registration
     Then the user Saves the appointment after reviewing.
     And clicks the provides SGI number to go to the Appointment List screen to verify the appointment confirmation number.
 
-
+  @book_appointment
+  Scenario: Click on the link in email and Book an appointment by the portal patient.
+    Given user is on email Login Page.
+    When the user provide the "User Name" and "Password", and clicks the "Login" button, the user is navigated to the mail "Inbox" screen.
+    Then the user opens the received email and click the link Click Here which will take the user to the appointment screen.
+    When the user clicks Book appointment button after entering Registration confirmation number and phn number, the user is moved to appointment detail screen.
+    And the user selects the appointment details and clicks Next button.
+    Then the user enters email and confirm booking.

@@ -128,7 +128,7 @@ def step_impl(context, user_name, password, login_btn, inbox):
 @then("the user opens the received email and click the link {click_here_link} which will take the user to the {"
       "appointment} screen.")
 def step_impl(context, click_here_link, appointment):
-    BookAppointment(context).open_email_click_link("label:vaccination-confirmation", appointment)
+    BookAppointment(context).open_email_click_link("\"- Confirmation number " + get_setting("REG_NO", "reg_no") + "\"", appointment)
 
 
 @when("the user clicks {book_appointment} button after entering {registration_confirmation_number} and {phn_number}, "

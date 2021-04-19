@@ -190,23 +190,7 @@ class CallCenterConsole(BASEPAGE):
         windows_after = self.browser.window_handles
         new_window = [x for x in windows_after if x != windows_before][0]
         self.browser.switch_to.window(new_window)
-        # get the Session id of the Parent
-        # parentGUID = self.browser.current_window_handle
-        # # get the All the session id of the browsers
-        # allGUID = self.browser.window_handles
-        # print(allGUID)
-        # num = len(allGUID)
-        # print(str(num))
-        # w = self.browser.window_handles[num - 1]
-        # self.browser.switch_to.window(str(allGUID[2]))
-        # i = 0
-        # while num != 0:
-        #     # one enter into if block if the GUID is not equal to parent window's GUID
-        #     if allGUID[i] == parentGUID:
-        #         # switch to the guid
-        #         self.browser.switch_to.window(guid)
-        #         # break the loop
-        #         break
+
 
     def go_to_appointment_tab(self):
         e = None
